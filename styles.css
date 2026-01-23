@@ -1,4 +1,3 @@
-/* Basic CSS Reset */
 
 * {
   margin: 0;
@@ -10,25 +9,59 @@ html,
 body {
   height: 100dvh;
   width: 100dvw;
-  background-image: radial-gradient(circle, oklch(70% 0.2 240) 0 200px, oklch(90% 0.1 240) 300px 100%);
+  background-image: radial-gradient(circle, oklch(70% 0.2 240) 200px, oklch(40% 0.1 240) 100%);
 }
 body {
   display: flex;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, sans-serif;
-  place-items: center;
   justify-content: center;
+  align-items: center;
 }
-
-.card{
+.card-component {
+  position: relative;
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card {
   --total-siblings: sibling-count();
   --index: sibling-index();
-  --angle: calc(300 + ( var(--index) - 1 ) * (120 / var(--total-siblings)));
-  --radius: 200px;
+  /* Calculate the angle for each card */
+  --angle: calc((var(--index) / (var(--total-siblings))) * 40deg - 110deg);
+  /* Calculate the layer for each card so edges are underneath */
+  --layer: calc(var(--total-siblings) - abs(var(--cards-from-center)));
+  /* controls vertical curviture */
+  --radius-vertical: 1200px;
+  /* controls horizontal spread along with --angle */
+  --radius-horizontal: 1200px;
+  /* calculate the distance from the center with negative numbers too for rotation */
+  --cards-from-center: calc((var(--index) - var(--total-siblings) / 2));
   position: absolute;
-  transform: translate( calc(cos(var(--angle) * var(--radius))), calc(sin(var(--angle) * var(--radius))));
-  /* top:0; */
+  /* positions cards along a circular path and rotates them according to their position */
+  transform: 
+        translate(calc(cos(var(--angle)) * var(--radius-horizontal)),
+        calc(sin(var(--angle)) * var(--radius-vertical))) 
+
+        rotate(calc(var(--cards-from-center) * 5deg));
+
+  top: var(--radius-vertical);
+  left: 40%;
   height: 30vh;
   width: 200px;
   border-radius: 15px;
   background-color: oklch(calc(var(--index) * 10% + 20%) 0.15 100);
+  transition: all 0.3s ease;
+  z-index:var(--layer);
 }
+
+.card:hover {
+  background-color: oklch(calc(var(--index) * 10% + 20%) 0.3 100);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  transform: translate(calc(cos(var(--angle)) * var(--radius-horizontal)),
+        calc(sin(var(--angle)) * var(--radius-vertical) - 50px)) scale(1.05) rotate(calc(var(--cards-from-center) * 3deg));
+  transition: all 0.3s ease;
+  cursor: pointer;
+  z-index: 100;
+}   
