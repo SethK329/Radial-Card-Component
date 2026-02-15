@@ -71,7 +71,7 @@ body {
   
   z-index:var(--layer);;
 }
-
+/* would like to adjust hover state from transistion to animation, need to fine tune card movements */
 .card-component > *:hover {
   background-color: oklch(calc(var(--index) * 10% + 20%) 0.3 100);
   box-shadow: 0 10px 20px rgba(0,0,0,0.8);
@@ -112,7 +112,7 @@ body {
         translate(calc(cos(var(--angle)) * var(--radius-horizontal) - 20px),
         calc(sin(var(--angle)) * var(--radius-vertical))) rotate(calc(var(--angle) - 270deg + 1deg));
 }
-
+/* container queries need work to make this responsive */
 @container (max-width: 600px) {
   .card-component > * {
     --height: 60cqh;
