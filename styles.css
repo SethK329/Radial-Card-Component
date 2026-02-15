@@ -30,7 +30,7 @@ body {
   container-type: size;
 }
 
-.card {
+.card-component > * {
   --total-siblings: sibling-count();
   --index: sibling-index();
   --height: 80cqh;
@@ -72,7 +72,7 @@ body {
   z-index:var(--layer);;
 }
 
-.card:hover {
+.card-component > *:hover {
   background-color: oklch(calc(var(--index) * 10% + 20%) 0.3 100);
   box-shadow: 0 10px 20px rgba(0,0,0,0.8);
   transform: 
@@ -83,13 +83,13 @@ body {
   cursor: pointer;
   z-index: 100;
   /* hover state for the card to the right of hovered */
-  + .card {
+  + * {
     transform: 
         translate(0%, -45%)
         translate(calc(cos(var(--angle)) * var(--radius-horizontal) + 30px),
         calc(sin(var(--angle)) * var(--radius-vertical) - 20px)) rotate(calc(var(--angle) - 270deg - 3deg));
         /* hover state for the card two positions to the right of hovered */
-        + .card {
+        + * {
           transform: 
           translate(0%, -45%)
           translate(calc(cos(var(--angle)) * var(--radius-horizontal) + 30px),
@@ -98,7 +98,7 @@ body {
   }
 }   
 /* hover state for the card to the left of hovered  */
-.card:has(+ .card:hover) {
+.card-component > *:has(+ *:hover) {
   transform: 
         translate(0%, -45%)
         translate(calc(cos(var(--angle)) * var(--radius-horizontal) - 20px),
@@ -106,7 +106,7 @@ body {
 
 }
 /* hover state for the card two positions to the left of hovered */
-.card:has(+ .card + .card:hover) {
+.card-component > *:has(+ * + *:hover) {
   transform: 
         translate(0%, -45%)
         translate(calc(cos(var(--angle)) * var(--radius-horizontal) - 20px),
@@ -114,7 +114,7 @@ body {
 }
 
 @container (max-width: 600px) {
-  .card {
+  .card-component > * {
     --height: 60cqh;
     --arc-spread: 20deg;
   }
