@@ -71,7 +71,7 @@ body {
   
   z-index:var(--layer);;
 }
-/* would like to adjust hover state from transistion to animation, need to fine tune card movements */
+/* would like to adjust hover state from transistion to animation, need to fine tune card movement */
 .card-component > *:hover {
   background-color: oklch(calc(var(--index) * 10% + 20%) 0.3 100);
   box-shadow: 0 10px 20px rgba(0,0,0,0.8);
