@@ -78,7 +78,7 @@ body {
   height: var(--scale-from-center-height);
 
   border-radius: 15px;
-  
+
   background-color: oklch(calc(var(--index) * 7% + 20%) 0.15 100);
 
   transition: transform 0.3s ease,
@@ -97,8 +97,6 @@ body {
         translate(0%, -45%)
         translate(calc(cos(var(--angle)) * var(--radius-horizontal)),
         calc(sin(var(--angle)) * var(--radius-vertical) - 80px)) scale(1.05) rotate(calc(var(--cards-from-center) * 3deg));
-
-  transition: all 0.3s ease;
 
   cursor: pointer;
 
