@@ -21,18 +21,20 @@ body {
 
 .card-component {
   position: relative;
-  height: 500px;
+  height: 30vh;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 2rem;
+
   container-type: size;
+  outline:2px solid;
 }
 
 .card-component > * {
   --total-siblings: sibling-count();
   --index: sibling-index();
+  /* need to figure out a clamp to keep cards from getting too small */
   --height: 80cqh;
 
   /* no width specified, using golden ratio to size cards off of height */
@@ -63,13 +65,12 @@ body {
   --scale-from-center-height: calc(var(--height) - abs(var(--cards-from-center)) * 5%);
 
   /* compensates for the transform */
-  top: calc(var(--radius-vertical) + var(--height) / 2);
+  top: calc(var(--radius-vertical) + calc(100cqh - var(--height)) / 2);
 
   /* positions cards along a circular path and rotates them according to their position around that arc */
   position: absolute;
 
   transform: 
-        translate(0%, -45%)
         translate(calc(cos(var(--angle)) * var(--radius-horizontal)),
         calc(sin(var(--angle)) * var(--radius-vertical))) 
 
@@ -89,11 +90,10 @@ body {
 }
 /* would like to adjust hover state from transistion to animation, need to fine tune card movement */
 .card-component > *:hover {
-  
+
   box-shadow: 0 10px 10px rgba(0,0,0,0.8);
 
   transform: 
-        translate(0%, -45%)
         translate(calc(cos(var(--angle)) * var(--radius-horizontal)),
         calc(sin(var(--angle)) * var(--radius-vertical) - 80px)) scale(1.05) rotate(calc(var(--cards-from-center) * 3deg));
 
@@ -105,7 +105,6 @@ body {
   + * {
 
     transform: 
-        translate(0%, -45%)
         translate(calc(cos(var(--angle)) * var(--radius-horizontal) + 30px),
         calc(sin(var(--angle)) * var(--radius-vertical) - 20px)) rotate(calc(var(--angle) - 270deg - 3deg));
         
@@ -113,7 +112,6 @@ body {
         + * {
 
           transform: 
-          translate(0%, -45%)
           translate(calc(cos(var(--angle)) * var(--radius-horizontal) + 30px),
           calc(sin(var(--angle)) * var(--radius-vertical))) rotate(calc(var(--angle) - 270deg - 1deg));
         }
@@ -124,7 +122,6 @@ body {
 .card-component > *:has(+ *:hover) {
 
   transform: 
-        translate(0%, -45%)
         translate(calc(cos(var(--angle)) * var(--radius-horizontal) - 20px),
         calc(sin(var(--angle)) * var(--radius-vertical) - 20px)) rotate(calc(var(--angle) - 270deg + 3deg));
 
@@ -134,7 +131,6 @@ body {
 .card-component > *:has(+ * + *:hover) {
 
   transform: 
-        translate(0%, -45%)
         translate(calc(cos(var(--angle)) * var(--radius-horizontal) - 20px),
         calc(sin(var(--angle)) * var(--radius-vertical))) rotate(calc(var(--angle) - 270deg + 1deg));
 }
@@ -143,8 +139,19 @@ body {
 @container (max-width: 600px) {
   .card-component > * {
 
-    --height: 60cqh;
+    --height: 50cqh;
 
     --arc-spread: 20deg;
+  }
+}
+
+@container (max-width: 400px) {
+  .card-component > * {
+
+    --height: 40cqh;
+    --vertical-radius: 1200px;
+    --horizontal-radius: 400px;
+    --arc-spread: 15deg;
+    
   }
 }
