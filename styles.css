@@ -8,7 +8,7 @@
 html,
 body {
   max-height: 100dvh;
-  background-image: radial-gradient(circle, oklch(50% 0.2 240) 200px, oklch(40% 0.08 240) 100%);
+  background-image: radial-gradient(circle, oklch(40% 0.2 240) 30%, oklch(80% 0.04 240)  100%);
 }
 
 body {
@@ -35,8 +35,8 @@ body {
   --total-siblings: sibling-count();
   --index: sibling-index();
 
-  /* need to figure out clamp values to keep cards from getting too small */
-  --height: 75cqh;
+  /* height based off of container height but clamped to prevent too much shrinkage */
+  --height: clamp(150px, 75cqh, 400px);
 
   /* no width specified, using golden ratio to size cards off of height */
   aspect-ratio: 1 / 1.6;
@@ -81,7 +81,7 @@ body {
 
   border-radius: 15px;
 
-  background-color: oklch(calc(var(--index) * 7% + 20%) 0.15 100);
+  background-color: oklch(calc(var(--index) * 7% + 20%) 0.15 150);
 
   transition: transform 0.3s ease,
               z-index .3s;
