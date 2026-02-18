@@ -64,7 +64,7 @@ body {
 /* reduces size of cards as they get further from the center */
   --scale-from-center-height: calc(var(--height) - abs(var(--cards-from-center)) * 5%);
 
-  /* compensates for the transform */
+  /* compensates for the transform and centers vertically within container*/
   top: calc(var(--radius-vertical) + calc(100cqh - var(--height)) / 2);
 
   /* positions cards along a circular path and rotates them according to their position around that arc */
