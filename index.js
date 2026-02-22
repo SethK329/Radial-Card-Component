@@ -1,10 +1,10 @@
 // Get input elements
-const cardCountInput = document.getElementById('cardCount');
+const cardCountInput = document.getElementById('card-count');
 const widthInput = document.getElementById('width');
 const heightInput = document.getElementById('height');
 
 // Get the card component container
-const cardComponent = document.getElementById('cardComponent');
+const cardComponent = document.getElementById('card-component');
 
 // Update card count (number of children)
 cardCountInput?.addEventListener('input', (e) => {
