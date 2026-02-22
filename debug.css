@@ -1,0 +1,11 @@
+
+
+.card-component > *{
+  overflow: clip;
+}
+
+
+.card-data{
+  margin:.5rem;
+  text-wrap: nowrap;
+}
