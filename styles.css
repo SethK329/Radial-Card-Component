@@ -53,7 +53,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-
   container-type: size;
   outline:2px solid;
 }
@@ -62,7 +61,7 @@ body {
 .card-component > * {
   --total-siblings: sibling-count();
   --index: sibling-index();
-
+  
   /* height based off of container height but clamped to prevent too much shrinkage */
   --height: clamp(150px, 75cqh, 400px);
 
@@ -76,7 +75,7 @@ body {
   --arc-spread: 40deg;
 
   /* controls the reduction of size in cards further from the center */
-  --card-depth: 4%;
+  --card-depth: 4cqh;
 
   /* gives each card an equal spread angle used to calc angle*/
   --offset-angle: calc(var(--arc-spread) / var(--total-siblings));
@@ -88,7 +87,7 @@ body {
   --layer: calc(var(--total-siblings) - abs(var(--cards-from-center)));
 
   /* large imaginary radius for smooth curve of cards adjusted by card height to create a smooth bottom curve*/
-  --radius-vertical: calc(400px + (var(--height) - var(--scale-from-center-height)));
+  --radius-vertical: 1000px;
 
   /* large radius for smooth curve of cards also affects the horizontal spread */
   --radius-horizontal: 1000px;
@@ -96,8 +95,11 @@ body {
 /* reduces size of cards as they get further from the center */
   --scale-from-center-height: calc(var(--height) - abs(var(--cards-from-center)) * var(--card-depth));
 
+  /* the difference in height between the original card height and the scaled card height to compensate for the transform */
+  --height-difference:calc(var(--height) - var(--scale-from-center-height));
+
   /* compensates for the transform and centers vertically within container*/
-  top: calc(var(--radius-vertical) + calc(100cqh - var(--scale-from-center-height)) / 2);
+  top: calc(var(--radius-vertical) + calc(100cqh - var(--scale-from-center-height) + var(--height-difference)) / 2);
 
   /* positions cards along a circular path and rotates them according to their position around that arc */
   position: absolute;
@@ -112,7 +114,7 @@ body {
 
   border-radius: 15px;
 
-  background-color: oklch(calc(var(--index) * 7% + 20%) 0.15 150);
+  background-color: oklch(calc(var(--index) * 4% + 20%) 0.15 150);
 
   transition: transform 0.3s ease,
               z-index .3s;
@@ -145,7 +147,7 @@ body {
         + * {
           transform: 
           translate(calc(cos(var(--angle)) * var(--radius-horizontal) + 30px),
-          calc(sin(var(--angle)) * var(--radius-vertical))) rotate(calc(var(--angle) - 270deg - 1deg));
+          calc(sin(var(--angle)) * var(--radius-vertical) - 15px)) rotate(calc(var(--angle) - 270deg - 1deg));
         }
   }
 }   
@@ -159,10 +161,10 @@ body {
 }
 
 /* hover state for the card two positions to the left of hovered */
-.card-component > *:has(+ * + *.card-component>*:has(+ *:is(:hover, :focus))) {
+.card-component > *:has(+ * + *:is(:hover, :focus)) {
   transform: 
         translate(calc(cos(var(--angle)) * var(--radius-horizontal) - 20px),
-        calc(sin(var(--angle)) * var(--radius-vertical))) rotate(calc(var(--angle) - 270deg + 1deg));
+        calc(sin(var(--angle)) * var(--radius-vertical) - 15px)) rotate(calc(var(--angle) - 270deg + 1deg));
 }
 
 /* container queries need work to make this responsive */
