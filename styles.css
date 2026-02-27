@@ -17,6 +17,9 @@ header{
  justify-content: center;
  align-items: center;
  gap: 100px;
+ & H1{
+  margin-top: 3em;
+ }
  & nav{
     display: flex;
     flex-direction: column;
@@ -35,14 +38,16 @@ header{
 }
 
 body {
-  display: flex;
-  flex-direction: column;
   height: 100dvh;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   justify-content: center;
   align-items: center;
 }
-
+main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 /* EVERYTHING BELOW IS THE CSS THAT MATTERS*/
 
 /* The wrapper that one can set the size for in their layout */
@@ -59,68 +64,68 @@ body {
 
 /* This is where the magic/math happens */
 .card-component > * {
-  --total-siblings: sibling-count();
-  --index: sibling-index();
   
-  /* height based off of container height but clamped to prevent too much shrinkage */
-  --height: clamp(150px, 75cqh, 400px);
+  border-radius: 15px;
+  background-color: oklch(calc(var(--index) * 5% + 20%) 0.15 150);
+
+  /* positions cards along a circular path and rotates them according to their position around that arc */
+  position: absolute;
 
   /* no width specified, using golden ratio to size cards off of height */
   aspect-ratio: auto 1 / 1.6;
 
+  --total-siblings: sibling-count();
+  --index: sibling-index();
+  
+  /* controls amount of space cards can spread across */
+  --arc-spread: 40;
+  
+  /* large imaginary radius for smooth curve of cards adjusted by card height to create a smooth bottom curve*/
+  --radius-vertical: 1000px;
+  
+  /* large radius for smooth curve of cards also affects the horizontal spread */
+  --radius-horizontal: 1000px;
+  
+  /* controls the reduction of size in cards further from the center */
+  --card-depth: clamp(10px, 4cqh, 25px);
+
   /* calculate unified distance from center, no abs() to keep negative numbers for rotation calc */
   --cards-from-center: calc(var(--index) - (var(--total-siblings) + 1) / 2);
-
-  /* controls amount of space cards can spread across */
-  --arc-spread: 40deg;
-
-  /* controls the reduction of size in cards further from the center */
-  --card-depth: 4cqh;
-
+  
   /* gives each card an equal spread angle used to calc angle*/
-  --offset-angle: calc(var(--arc-spread) / var(--total-siblings));
+  --offset-angle: calc(var(--arc-spread) / var(--total-siblings) * 1deg);
 
   /* Calculate the angle for each card from the top center which is 270deg */
   --angle: calc(var(--cards-from-center) * var(--offset-angle) + 270deg);
 
   /* Calculate the z-index for each card so edges are underneath */
   --layer: calc(var(--total-siblings) - abs(var(--cards-from-center)));
+  z-index: var(--layer);
+  /* height based off of container height but clamped to prevent too much shrinkage */
+  --height: clamp(150px, 75cqh, 550px);
 
-  /* large imaginary radius for smooth curve of cards adjusted by card height to create a smooth bottom curve*/
-  --radius-vertical: 1000px;
-
-  /* large radius for smooth curve of cards also affects the horizontal spread */
-  --radius-horizontal: 1000px;
-
-/* reduces size of cards as they get further from the center */
+  /* reduces size of cards as they get further from the center */
   --scale-from-center-height: calc(var(--height) - abs(var(--cards-from-center)) * var(--card-depth));
 
+  height: var(--scale-from-center-height);
+  
   /* the difference in height between the original card height and the scaled card height to compensate for the transform */
-  --height-difference:calc(var(--height) - var(--scale-from-center-height));
+  --height-difference: calc(var(--height) - var(--scale-from-center-height));
 
   /* compensates for the transform and centers vertically within container*/
   top: calc(var(--radius-vertical) + calc(100cqh - var(--scale-from-center-height) + var(--height-difference)) / 2);
-
-  /* positions cards along a circular path and rotates them according to their position around that arc */
-  position: absolute;
 
   transform: 
         translate(calc(cos(var(--angle)) * var(--radius-horizontal)),
         calc(sin(var(--angle)) * var(--radius-vertical))) 
 
         rotate(calc(var(--angle) - 270deg));
-
-  height: var(--scale-from-center-height);
-
-  border-radius: 15px;
-
-  background-color: oklch(calc(var(--index) * 4% + 20%) 0.15 150);
+        
 
   transition: transform 0.3s ease,
               z-index .3s;
   transition-behavior: allow-discrete;
   
-  z-index:var(--layer);
 }
 
 /* would like to adjust hover state from transistion to animation, need to fine tune card movement */
@@ -170,12 +175,12 @@ body {
 /* container queries need work to make this responsive */
 @container (max-width: 700px) {
   .card-component > * {
-    --arc-spread: 20deg;
+    --arc-spread: 20;
   }
 }
 
 @container (max-width: 400px) {
   .card-component > * {
-    --arc-spread: 10deg;
+    --arc-spread: 10;
   }
 }
