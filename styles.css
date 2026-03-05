@@ -68,29 +68,41 @@ main{
   border-radius: 15px;
   background-color: oklch(calc(var(--index) * 5% + 20%) 0.15 150);
 
-  /* positions cards along a circular path and rotates them according to their position around that arc */
+  /* gives all the cards a central starting point to do trig calculations on for placement*/
   position: absolute;
 
-  /* no width specified, using golden ratio to size cards off of height */
-  aspect-ratio: auto 1 / 1.6;
-
+  /* these give us total cards in the component and each cards index */
   --total-siblings: sibling-count();
   --index: sibling-index();
-  
+
   /* controls amount of space cards can spread across */
   --arc-spread: 40;
-  
+
   /* large imaginary radius for smooth curve of cards adjusted by card height to create a smooth bottom curve*/
   --radius-vertical: 1000px;
-  
+
   /* large radius for smooth curve of cards also affects the horizontal spread */
   --radius-horizontal: 1000px;
-  
+
   /* controls the reduction of size in cards further from the center */
   --card-depth: clamp(10px, 4cqh, 25px);
 
   /* calculate unified distance from center, no abs() to keep negative numbers for rotation calc */
-  --cards-from-center: calc(var(--index) - (var(--total-siblings) + 1) / 2);
+    --cards-from-center: calc(var(--index) - (var(--total-siblings) + 1) / 2);
+    
+  /* height based off of container height but clamped to prevent too much shrinkage */
+  --height: clamp(150px, 75cqh, 550px);
+
+  /* reduces size of cards as they get further from the center */
+  --scale-from-center-height: calc(var(--height) - abs(var(--cards-from-center)) * var(--card-depth));
+
+  height: var(--scale-from-center-height);
+
+  /* the difference in height between the original card height and the scaled card height to compensate for the transform */
+  --height-difference: calc(var(--height) - var(--scale-from-center-height));
+
+  /* no width specified, using golden ratio to size cards off of height */
+  aspect-ratio: auto 1 / 1.6;
   
   /* gives each card an equal spread angle used to calc angle*/
   --offset-angle: calc(var(--arc-spread) / var(--total-siblings) * 1deg);
@@ -101,16 +113,6 @@ main{
   /* Calculate the z-index for each card so edges are underneath */
   --layer: calc(var(--total-siblings) - abs(var(--cards-from-center)));
   z-index: var(--layer);
-  /* height based off of container height but clamped to prevent too much shrinkage */
-  --height: clamp(150px, 75cqh, 550px);
-
-  /* reduces size of cards as they get further from the center */
-  --scale-from-center-height: calc(var(--height) - abs(var(--cards-from-center)) * var(--card-depth));
-
-  height: var(--scale-from-center-height);
-  
-  /* the difference in height between the original card height and the scaled card height to compensate for the transform */
-  --height-difference: calc(var(--height) - var(--scale-from-center-height));
 
   /* compensates for the transform and centers vertically within container*/
   top: calc(var(--radius-vertical) + calc(100cqh - var(--scale-from-center-height) + var(--height-difference)) / 2);
@@ -121,7 +123,6 @@ main{
 
         rotate(calc(var(--angle) - 270deg));
         
-
   transition: transform 0.3s ease,
               z-index .3s;
   transition-behavior: allow-discrete;
